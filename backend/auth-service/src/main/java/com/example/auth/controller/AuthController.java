@@ -8,9 +8,11 @@ import com.example.auth.entity.User;
 import com.example.auth.repository.UserRepository;
 import com.example.auth.security.JwtUtil;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
 
     @Autowired
     private UserRepository repo;
