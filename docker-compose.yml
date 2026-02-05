@@ -1,0 +1,71 @@
+services:
+
+  auth-db:
+    image: mysql:8.0
+    container_name: auth-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - auth_db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  student-db:
+    image: mysql:8.0
+    container_name: student-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: student_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - student_db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  auth-service:
+    build: ./backend/auth-service
+    container_name: auth-service
+    restart: always
+    ports:
+      - "8087:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://auth-db:3306/auth_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0
+      JWT_SECRET: mysecretkeymysecretkeymysecretkeymysecretkey
+    depends_on:
+      - auth-db
+    networks:
+      - app-network
+
+  student-service:
+    build: ./backend/student-service
+    container_name: student-service
+    restart: always
+    ports:
+      - "8088:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://student-db:3306/student_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0
+      JWT_SECRET: mysecretkeymysecretkeymysecretkeymysecretkey
+    depends_on:
+      - student-db
+      - auth-service
+    networks:
+      - app-network
+
+volumes:
+  auth_db_data:
+  student_db_data:
+
+networks:
+  app-network:
