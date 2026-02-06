@@ -6,7 +6,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
@@ -16,9 +16,21 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("*"));
-        config.setAllowedHeaders(List.of("*"));
+        // Allow your frontend domain
+        config.setAllowedOrigins(
+                Arrays.asList("https://user-student-web-app.onrender.com")
+        );
+
+        // Allow HTTP methods
+        config.setAllowedMethods(
+                Arrays.asList("GET","POST","PUT","DELETE","OPTIONS")
+        );
+
+        // Allow headers
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        // Allow credentials (important for auth)
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
