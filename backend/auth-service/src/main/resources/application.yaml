@@ -1,11 +1,27 @@
 server:
-  port: 8083
+  port: ${PORT:8083}
 
 spring:
+
+  application:
+    name: auth-service
+
   datasource:
-    url: jdbc:mysql://localhost:3306/auth_db
-    username: root
-    password: root
+    url: jdbc:postgresql://dpg-d62nu14hg0os73eojc9g-a:5432/auth_db_sulg
+    username: auth_db_sulg_user
+    password: OckLAGtiezZUVc4WqjuFU0fvS52kyXyg
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
